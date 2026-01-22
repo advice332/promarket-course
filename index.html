@@ -115,19 +115,6 @@
             transform: scale(1.1);
         }
 
-        /* Заблокированный модуль */
-        .module-card.locked {
-            opacity: 0.5;
-            cursor: not-allowed;
-            filter: grayscale(1);
-        }
-        .module-card.locked::after {
-            content: 'COMING SOON';
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-10deg);
-            font-size: 24px; font-weight: 800; color: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 10px;
-        }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -150,12 +137,13 @@
                 <div class="btn-arrow">→</div>
             </a>
 
-            <a href="course2.html" class="module-card locked"> <div>
-                    <span class="module-tag">Часть 2 • Advanced</span>
-                    <h2 class="module-name">PRO Дизайн</h2>
-                    <p class="module-desc">Углубленное изучение инструментов, сложная ретушь, нейросети Pro-уровня и работа с крупными брендами.</p>
-                </div>
-                <div class="btn-arrow">🔒</div>
+            <a href="modules2.html" class="module-card active">
+    <div>
+        <span class="module-tag">Часть 2 • Advanced</span>
+        <h2 class="module-name">PRO Дизайн</h2>
+        <p class="module-desc">Углубленное изучение инструментов, сложная ретушь, нейросети Pro-уровня и работа с крупными брендами.</p>
+    </div>
+    <div class="btn-arrow">→</div>
             </a>
         </div>
     </div>
