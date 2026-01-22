@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRO MARKET | Выбор модуля</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-hero: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05); /* Чуть светлее для контраста */
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+        body {
+            font-family: var(--font-main); background: #020617; color: white;
+            min-height: 100vh; display: flex; flex-direction: column;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: ''; position: absolute; inset: 0; background: var(--bg-hero); z-index: -1;
+            background-attachment: fixed;
+        }
+
+        /* HEADER */
+        .header {
+            padding: 25px 50px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: var(--glass-border); background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(20px);
+        }
+        .brand { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+        .back-link { 
+            color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 600; 
+            transition: 0.3s; display: flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 50px; border: 1px solid transparent;
+        }
+        .back-link:hover { color: white; border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+
+        /* GRID */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; width: 100%; }
+        .page-title { font-size: 36px; font-weight: 800; margin-bottom: 40px; text-align: center; }
+
+        .modules-grid {
+            display: grid; 
+            /* Исправлено: адаптивная ширина от 300px, чтобы влезало по 3 в ряд красиво */
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 24px;
+        }
+
+        .module-card {
+            background: var(--glass-bg); border: var(--glass-border); border-radius: 20px;
+            padding: 15px; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; 
+            min-height: 120px; /* Минимальная высота для ровности */
+            text-decoration: none; color: white;
+            position: relative; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        /* Эффект при наведении */
+        .module-card:hover {
+            background: rgba(255,255,255,0.08); transform: translateY(-5px);
+            border-color: #8b5cf6; box-shadow: 0 15px 35px rgba(139, 92, 246, 0.15);
+        }
+        
+        .mod-num { 
+            font-size: 11px; text-transform: uppercase; color: #8b5cf6; 
+            font-weight: 800; margin-bottom: 12px; letter-spacing: 0.1em; 
+        }
+        .mod-title { 
+            font-size: 15px; font-weight: 700; margin-bottom: 10px; line-height: 1.4; 
+            flex-grow: 1; /* Растягивает заголовок, прижимая низ к низу */
+        }
+        
+        /* Нижняя часть карточки */
+        .mod-meta { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .mod-count { font-size: 13px; color: #64748b; font-weight: 600; }
+        
+        .arrow-icon { 
+            width: 36px; height: 36px; 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            transition: 0.3s; 
+            font-size: 16px;
+        }
+        .module-card:hover .arrow-icon { 
+            background: var(--accent-gradient); color: white; 
+            transform: rotate(-45deg); /* Эффект поворота стрелки */
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="start.html" class="back-link">← На главную</a>
+        <div class="brand">PRO MARKET <span style="opacity:0.5; font-weight:400; font-size:14px; margin-left:5px;">LMS</span></div>
+        <div style="width:100px"></div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Программа обучения</h1>
+        <div class="modules-grid" id="gridContainer">
+            </div>
+    </div>
+
+    <script>
+        const courseData = [
+            { title: "0. Введение", lessonsCount: 7 },
+            { title: "1. Основы Figma", lessonsCount: 12 },
+            { title: "2. Крутой дизайн", lessonsCount: 6 },
+            { title: "3. Практическая работа", lessonsCount: 11 },
+            { title: "4. Поиск клиентов", lessonsCount: 10 },
+            { title: "5. Нейросети", lessonsCount: 8 },
+            { title: "6. Финал", lessonsCount: 3 }
+        ];
+
+        const grid = document.getElementById('gridContainer');
+        
+        grid.innerHTML = courseData.map((mod, index) => `
+            <a href="lesson.html?mod=${index}" class="module-card">
+                <div class="mod-num">Модуль ${index}</div>
+                <h3 class="mod-title">${mod.title}</h3>
+                <div class="mod-meta">
+                    <span class="mod-count">${mod.lessonsCount} материалов</span>
+                    <div class="arrow-icon">→</div>
+                </div>
+            </a>
+        `).join('');
+    </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRO MARKET | Education Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-hero: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main);
+            background: #020617;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: white;
+            position: relative;
+        }
+
+        /* Фоновый эффект */
+        body::before {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            background: var(--bg-hero); z-index: -1;
+        }
+        body::after {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 32px 32px; pointer-events: none; z-index: -1;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo-area { margin-bottom: 60px; }
+        .logo-badge {
+            display: inline-block; padding: 8px 16px; 
+            background: var(--glass-bg); border: var(--glass-border); 
+            border-radius: 50px; margin-bottom: 20px;
+            font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #94a3b8;
+        }
+        .main-title { font-size: 56px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 10px; }
+        .sub-title { font-size: 18px; color: #94a3b8; font-weight: 400; }
+
+        /* Сетка модулей */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: left;
+            text-decoration: none;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+        }
+
+        /* Эффект при наведении (только для активных) */
+        .module-card.active:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #8b5cf6;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .module-tag {
+            font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+            color: #8b5cf6; font-weight: 700; margin-bottom: 16px;
+            display: block;
+        }
+
+        .module-name { font-size: 28px; font-weight: 700; color: white; margin-bottom: 12px; }
+        .module-desc { font-size: 14px; color: #94a3b8; line-height: 1.6; max-width: 90%; }
+
+        .btn-arrow {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--glass-bg); border: var(--glass-border);
+            display: flex; align-items: center; justify-content: center;
+            color: white; margin-top: 30px; transition: 0.3s;
+        }
+        .module-card.active:hover .btn-arrow {
+            background: var(--accent-gradient);
+            border-color: transparent;
+            transform: scale(1.1);
+        }
+
+        /* Заблокированный модуль */
+        .module-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+        .module-card.locked::after {
+            content: 'COMING SOON';
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-10deg);
+            font-size: 24px; font-weight: 800; color: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 10px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-area">
+            <div class="logo-badge">Internal Platform</div>
+            <h1 class="main-title">PRO MARKET</h1>
+            <p class="sub-title">Обучающая платформа для сотрудников агентства</p>
+        </div>
+
+        <div class="modules-grid">
+            <a href="modules.html" class="module-card active">
+                <div>
+                    <span class="module-tag">Часть 1 • Basic</span>
+                    <h2 class="module-name">Основы Инфографики</h2>
+                    <p class="module-desc">Базовый курс по Figma, композиции, работе с клиентами и первичному трудоустройству через Kwork.</p>
+                </div>
+                <div class="btn-arrow">→</div>
+            </a>
+
+            <a href="course2.html" class="module-card locked"> <div>
+                    <span class="module-tag">Часть 2 • Advanced</span>
+                    <h2 class="module-name">PRO Дизайн</h2>
+                    <p class="module-desc">Углубленное изучение инструментов, сложная ретушь, нейросети Pro-уровня и работа с крупными брендами.</p>
+                </div>
+                <div class="btn-arrow">🔒</div>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

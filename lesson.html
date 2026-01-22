@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок | PRO MARKET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ГЛОБАЛЬНЫЕ СТИЛИ */
+        :root {
+            --bg-body: #020617;
+            --bg-sidebar: #0b0d12;
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --text-main: #fff;
+            --text-muted: #94a3b8;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body { font-family: var(--font-main); background: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+
+        /* САЙДБАР */
+        .sidebar { width: 340px; background: var(--bg-sidebar); border-right: var(--glass-border); display: flex; flex-direction: column; z-index: 20; flex-shrink: 0; }
+        .sidebar-header { padding: 20px 24px; border-bottom: var(--glass-border); flex-shrink: 0; }
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-size: 12px; font-weight: 600; transition: 0.2s; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .back-btn:hover { color: #fff; }
+        .module-title { font-size: 16px; font-weight: 800; line-height: 1.4; color: white; }
+        .sidebar-scroll { flex: 1; overflow-y: auto; padding: 0; }
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        .list-section { padding: 20px 16px 10px; }
+        .section-header { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 10px; padding-left: 12px; }
+        
+        .lesson-item { display: flex; align-items: center; gap: 12px; padding: 12px; margin-bottom: 4px; border-radius: 8px; cursor: pointer; color: var(--text-muted); font-size: 13px; font-weight: 500; transition: 0.2s; border: 1px solid transparent; }
+        .lesson-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .lesson-item.active { background: rgba(139, 92, 246, 0.1); color: #fff; font-weight: 600; border-color: rgba(139, 92, 246, 0.3); }
+        .type-icon { opacity: 0.7; width: 16px; text-align: center; font-size: 14px; }
+        .divider { height: 1px; background: var(--glass-border); margin: 0 20px; }
+
+        /* ГЛАВНАЯ ОБЛАСТЬ */
+        .main-area { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .stage-container { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        
+        /* ПЛЕЕРЫ */
+        iframe { width: 100%; height: 100%; border: none; background: #000; }
+        video { width: 100%; height: 100%; max-height: 100vh; object-fit: contain; outline: none; display: block; background: #000; }
+        .img-viewer { width: 100%; height: 100%; object-fit: contain; }
+
+        /* ТЕКСТОВЫЕ БЛОКИ */
+        .text-view { width: 100%; height: 100%; overflow-y: auto; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); padding: 60px; display: flex; justify-content: center; }
+        .glass-card { width: 100%; max-width: 800px; height: fit-content; background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: var(--glass-border); border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .glass-card h2 { margin-bottom: 24px; font-size: 28px; color: white; }
+        .glass-card p { color: #cbd5e1; margin-bottom: 20px; line-height: 1.6; }
+
+        /* КНОПКИ РЕСУРСОВ */
+        .res-grid { display: grid; gap: 15px; margin-top: 20px; }
+        .res-ticket { display: flex; align-items: center; gap: 20px; padding: 16px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-decoration: none; transition: 0.3s; color: white; }
+        .res-ticket:hover { background: rgba(255,255,255,0.1); border-color: #8b5cf6; transform: translateY(-2px); }
+        .res-icon-box { width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .res-info { display: flex; flex-direction: column; }
+        .res-name { font-weight: 700; font-size: 15px; }
+        .res-meta { font-size: 11px; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.05em; margin-top: 2px;}
+
+        /* ПРОМПТЫ */
+        .prompt-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; }
+        .prompt-label { font-size: 11px; text-transform: uppercase; color: #8b5cf6; font-weight: 700; margin-bottom: 8px; }
+        .prompt-text { font-style: italic; color: #e2e8f0; font-family: monospace; line-height: 1.5; }
+
+        /* НИЖНЯЯ ПАНЕЛЬ */
+        .bottom-bar { height: 70px; background: #0b0d12; border-top: var(--glass-border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; }
+        .lesson-info h2 { font-size: 15px; margin-bottom: 4px; font-weight: 700; }
+        .lesson-info p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .btn-dl { padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 8px; color: white; text-decoration: none; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-dl:hover { background: #8b5cf6; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="modules.html" class="back-btn">← Меню модулей</a>
+            <div class="module-title" id="moduleTitle">Загрузка...</div>
+        </div>
+        <div class="sidebar-scroll">
+            <div class="list-section">
+                <div class="section-header">📺 Видеоуроки</div>
+                <div id="videoList"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="list-section">
+                <div class="section-header">📂 Дополнительные материалы</div>
+                <div id="materialList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-area">
+        <div class="stage-container" id="stage"></div>
+        <div class="bottom-bar">
+            <div class="lesson-info">
+                <h2 id="currentTitle">Выберите урок</h2>
+                <p id="currentType">Тип файла</p>
+            </div>
+            <div id="actionArea"></div>
+        </div>
+    </div>
+
+    <script>
+        // === БАЗА ДАННЫХ RUTUBE ===
+        const courseData = [
+            {
+                title: "0. Введение",
+                folder: "[infoRai.NET] День 0. Введение",
+                lessons: [
+                    // RUTUBE
+                    { f: "https://rutube.ru/video/private/6120fdfa32b8a4b50000d718631e2ed4/?p=NwYu9JlIdSufU8Iimtejng", title: "1. Вводный урок", t: "video" },
+                    { f: "https://rutube.ru/video/private/e99ca4873ee81433f97b5e409118d124/?p=Gqh9VN87rP3D-_7tUstPrA", title: "2. Инфографика VS обычные фото", t: "video" },
+                    { f: "https://rutube.ru/video/private/465afc29d08d810ca4f7fb5fce6c312f/?p=jlViXeeXSBOfvWnOCFOCfQ", title: "3. Правила в дизайне карточек товара", t: "video" },
+                    // МАТЕРИАЛЫ
+                    { f: "вб слепая зона.png", t: "image" },
+                    { f: "озон слепая зона.png", t: "image" },
+                    { f: "Главные правила в дизайне карточек шпаргалка.pdf", t: "pdf" },
+                    { f: "Размеры карточек шпаргалка.pdf", t: "pdf" }
+                ]
+            },
+            {
+                title: "1. Основы Figma",
+                folder: "[infoRai.NET] День 1. Осваиваем Figma",
+                lessons: [
+                    // RUTUBE
+                    { f: "https://rutube.ru/video/private/f4837f440d3948288860d3a0b7179d2e/?p=ygVOS_CbWvhpTMrRUEaBoA", title: "1. Регистрация аккаунта и установка Figma", t: "video" },
+                    { f: "https://rutube.ru/video/private/115d1033f5daa3d496f484063004bcf5/?p=f11naMw3Xpiuhin8IH1wPw", title: "2. Изучение полного функционала Figma", t: "video" },
+                    { f: "https://rutube.ru/video/private/9a04bf59c6a18f5cd57f463ca011199e/?p=UNMyH3odr0GU5plrkUXiYw", title: "3. ТОП-9 плагинов для Figma", t: "video" },
+                    { f: "https://rutube.ru/video/private/1f9457e54f9c25ea1c684a951ca9251d/?p=nh3bHmVmUI1pQh88Mj1Bag", title: "4. Режимы наложения и эффекты", t: "video" },
+                    { f: "https://rutube.ru/video/private/5b977c03531b97122f36221e43a32eed/?p=_vVziJPjXPyyfzCDJ6Wv0Q", title: "5. Организация рабочего пространства", t: "video" },
+                    { f: "https://rutube.ru/video/private/001be69caef7016fa76d7965a602be6c/?p=Ald1tYVw_7muSf7RnP5mLw", title: "6. Удаление фона", t: "video" },
+                    { f: "https://rutube.ru/video/private/38576dde0a86cbe65893907b9c43046b/?p=zyHJvkcqXdz6IAJtzGuVTw", title: "7. Создаём обложку для товара", t: "video" },
+                    // МАТЕРИАЛЫ
+                    { f: "Гайды по установке шрифтов", t: "folder" },
+                    { f: "Карточка _Умные часы_", t: "folder" },
+                    { f: "infoRai.NET - Программа Фотошоп", t: "folder" },
+                    { f: "infoRai.NET - UltraWatch.png", t: "image" },
+                    { f: "infoRai.NET - Горячие клавиши.pdf", t: "pdf" }
+                ]
+            },
+            {
+                title: "2. Крутой дизайн",
+                folder: "[infoRai.NET] День 2. Крутой дизайн",
+                lessons: [
+                    // RUTUBE
+                    { f: "https://rutube.ru/video/private/9b6148a33ed69df79758b14cca032598/?p=K6_-JnyLo02P5hoHEQLF3Q", title: "1. Ошибки новичков", t: "video" },
+                    { f: "https://rutube.ru/video/private/e0907aed7cfa4aac53738b48ee4ef1c5/?p=unn5kBC6M6pu_j7TPK2c9g", title: "2. Прокачка насмотренности", t: "video" },
+                    { f: "https://rutube.ru/video/private/a606009312ae5d1cc1a31236ac56647a/?p=Wh2_Ka80b9ypTCGCz7epMg", title: "3. Топ полезных сайтов и сервисов", t: "video" },
+                    { f: "https://rutube.ru/video/private/abf5d0946b6802e2a225b01572e326d7/?p=1mznCcvqvtyd-eTqUpMPhg", title: "4. Видео про шрифты", t: "video" },
+                    // МАТЕРИАЛЫ
+                    { 
+                        f: "infoRai.NET - Полезные сервисы и сайты.txt", t: "txt",
+                        content: `<h2>Полезные сервисы</h2><p>Подборка ресурсов для работы:</p><div class="res-grid"><a href="https://www.flaticon.com/ru/" target="_blank" class="res-ticket"><div class="res-icon-box">♦</div><div class="res-info"><span class="res-name">Flaticon</span></div></a><a href="https://ru.freepik.com/" target="_blank" class="res-ticket"><div class="res-icon-box">E</div><div class="res-info"><span class="res-name">Freepik</span></div></a></div>`
+                    },
+                    { 
+                        f: "infoRai.NET - Чек-лист.txt", t: "txt",
+                        content: `<h2>Чек-лист ошибок</h2><p>Интерактивная доска в Figma:</p><div class="res-grid"><a href="https://www.figma.com/" target="_blank" class="res-ticket" style="border-color:#10b981;"><div class="res-icon-box">F</div><div class="res-info"><span class="res-name">Открыть Whiteboard</span></div></a></div>`
+                    }
+                ]
+            },
+            {
+                title: "3. Практическая работа",
+                folder: "[infoRai.NET] День 3. Практическая работа", 
+                lessons: [
+                    // RUTUBE
+                    { f: "https://rutube.ru/video/private/ec3cfba409b927c7659847def950074f/?p=AEml_7eSIH7t9FcOB3A9FA", title: "1. Где искать фото", t: "video" },
+                    { f: "https://rutube.ru/video/private/c4c38930e6c32d429b6de24e50f196c9/?p=ch1uV7SMvTr0FLligIBjGQ", title: "2. Анализ конкурентов", t: "video" },
+                    { f: "https://rutube.ru/video/private/401a8e53ec240b23c5864d8cf9b116a0/?p=slIq34kpPjDY4jRUv5fA0w", title: "3.1. Воронка продаж 2.0", t: "video" },
+                    { f: "https://rutube.ru/video/private/b6b427a8b9776fa45cc697f4d560110b/?p=OeNkBM-jywtC4xrpbOicOA", title: "3.2. Воронка продаж 2.0", t: "video" },
+                    { f: "https://rutube.ru/video/private/e401febd02d2ff977465cb955132e9af/?p=9Gs7Wp_msCFHQVmPrN-IKQ", title: "4. Создаём карточку (5 слайдов)", t: "video" },
+                    { f: "https://rutube.ru/video/private/9442e5b2511f070a7f95c4d3deb47fda/?p=nDm74kyboFafMGgKvIF-lA", title: "5. Как сделать Видео-обложку для Ozon", t: "video" },
+                    // МАТЕРИАЛЫ
+                    { f: "Для повторения (ремень)", t: "folder" },
+                    { f: "infoRai.NET - Google поиск по картинке.txt", t: "txt", content: `<h2>Google Images</h2><a href="https://www.google.ru/imghp" target="_blank" class="btn-dl">Открыть поиск</a>` },
+                    { f: "infoRai.NET - Референс ищите здесь.txt", t: "txt", content: `<h2>Канал с референсами</h2><a href="https://t.me/+VP9RwTe3RlQzNDNi" target="_blank" class="btn-dl">Перейти в Telegram</a>` },
+                    { f: "infoRai.NET - Ссылки на безопасное скачивание Adobe Premier Pro.txt", t: "txt", content: `<h2>Скачать Premiere Pro</h2><a href="https://stoigr.com/soft/12243-adobe-premiere-pro-2023-tor.html" target="_blank" class="btn-dl">Источник 1</a>` },
+                    { f: "infoRai.NET - Шаблон воронка продаж.txt", t: "txt", content: `<h2>Шаблон Figma</h2><a href="https://www.figma.com/file/XhVaSCfbE3BzqrorFDtTwY" target="_blank" class="btn-dl">Открыть шаблон</a>` }
+                ]
+            },
+            {
+                title: "4. Поиск клиентов",
+                folder: "[infoRai.NET] День 4. Поиск клиентов",
+                lessons: [
+                    // RUTUBE
+                    { f: "https://rutube.ru/video/private/b46a92e4d7605aaadb633a2757da6a46/?p=jmDbQc-SD5JQYKULOMInPA", title: "1. Работа через площадку", t: "video" },
+                    { f: "https://rutube.ru/video/private/95fcffa84d1932b73d7f668a268735ff/?p=km2R2NYA-XJNTSdj0zyrUw", title: "2. Продвижение через Telegram", t: "video" },
+                    { f: "https://rutube.ru/video/private/6be5c9d278b084ea9f0a9cd7317eec5e/?p=hdiiAkD20Qcxaqy7CG2rXg", title: "3. Как накрутить подписчиков", t: "video" },
+                    { f: "https://rutube.ru/video/private/b7296b0fdc91ce9916dc9c5d40f8c491/?p=6YeS8Keo4PvxBSryxnKwbg", title: "4. Портфолио и позиционирование", t: "video" },
+                    { f: "https://rutube.ru/video/private/6bb71c3c32d70ee4a59be046fe5785bc/?p=d94ZX1KgZlrdWpMLJI45cw", title: "5. Поток клиентов", t: "video" },
+                    { f: "https://rutube.ru/video/private/56ab215c70c850c0679c1274bd69708f/?p=GW09cvjGdXi25vgOxA1vwQ", title: "6. Как закрывать возражения клиентов", t: "video" },
+                    // УРОК (PDF)
+                    { f: "infoRai.NET - Грамотное общение с клиентом.pdf", t: "pdf" },
+                    // МАТЕРИАЛЫ
+                    { f: "infoRai.NET - Полезные ссылки.txt", t: "txt", content: `<h2>Каналы</h2><a href="https://t.me/mp_designphoto" class="btn-dl">MP Design</a>` },
+                    { f: "infoRai.NET - Сайт с накруткой.txt", t: "txt", content: `<h2>Накрутка</h2><a href="https://partner.soc-proof.su/" class="btn-dl">Открыть сервис</a>` },
+                    { f: "infoRai.NET - Kwork.txt", t: "txt", content: `<h2>Kwork</h2><p>Регистрируйтесь и начинайте работу:</p><a href="https://kwork.ru/" target="_blank" class="btn-dl">Перейти на Kwork</a>` }
+                ]
+            },
+            {
+                title: "5. Нейросети",
+                folder: "[infoRai.NET] День 5. Нейросети",
+                lessons: [
+                    // RUTUBE
+                    { f: "https://rutube.ru/video/private/8447bb69f2da2c957f0823230f357c93/?p=UP8_iuxmv_2mFTfykBYnqg", title: "1. Автоматическое удаление фона", t: "video" },
+                    { f: "https://rutube.ru/video/private/87841d6a871da62288eded5cdcb8d4ad/?p=QlzNXv2geH73rQXeCbbP-Q", title: "2. Улучшение качества фото", t: "video" },
+                    { f: "https://rutube.ru/video/private/6cc3b8c442108147845d34be560daeec/?p=FTj1UKZcEM--AInwvzTdMQ", title: "3. Генерация изображений по запросу", t: "video" },
+                    { f: "https://rutube.ru/video/private/2a1ef8d68ca1042b58006003499f8ef8/?p=cvXfakOjpvusTxw5GzrbEQ", title: "4. Chat GPT для продвижения", t: "video" },
+                    // МАТЕРИАЛЫ
+                    { f: "infoRai.NET - PhotoRoom.txt", t: "txt", content: `<h2>PhotoRoom</h2><a href="https://www.photoroom.com/" class="btn-dl">Открыть сайт</a>` },
+                    { f: "infoRai.NET - Бот.txt", t: "txt", content: `<h2>PixelWiz Bot</h2><a href="https://t.me/pixelwiz_bot" class="btn-dl">Запустить бота</a>` },
+                    { f: "infoRai.NET - Полезные ссылки.txt", t: "txt", content: `<h2>AI Инструменты</h2><a href="https://leonardo.ai/" class="btn-dl">Leonardo AI</a>` },
+                    { f: "infoRai.NET - Те самые сообщения.txt", t: "txt", content: `<h2>Промпты ChatGPT</h2><p>Скопируйте промпты из файла.</p>` }
+                ]
+            },
+            {
+                title: "6. Финал",
+                folder: "[infoRai.NET] День 6. Завершение",
+                lessons: [
+                    // RUTUBE
+                    { f: "https://rutube.ru/video/private/062b06afcdaa701cef7eac3cd3465bb7/?p=jELIgnakSl1GRo0CdCjC", title: "1. Что делать после интенсива", t: "video" },
+                    // МАТЕРИАЛЫ
+                    { f: "Пак дизайнера", t: "folder" },
+                    { f: "infoRai.NET - Экзамен.zip", t: "zip" }
+                ]
+            }
+        ];
+
+        // === ЛОГИКА ===
+        const urlParams = new URLSearchParams(window.location.search);
+        const modIndex = parseInt(urlParams.get('mod') || 0);
+        const currentModule = courseData[modIndex];
+
+        document.getElementById('moduleTitle').innerText = currentModule.title;
+        const videoList = document.getElementById('videoList');
+        const materialList = document.getElementById('materialList');
+        videoList.innerHTML = ''; materialList.innerHTML = '';
+
+        currentModule.lessons.forEach((less, idx) => {
+            const isActive = idx === 0 ? 'active' : '';
+            const displayName = less.title ? less.title : cleanName(less.f);
+            const html = `<div class="lesson-item ${isActive}" onclick="loadLesson(${idx}, this)" id="lesson-${idx}"><span class="type-icon">${getIcon(less.t)}</span><span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${displayName}</span></div>`;
+            if (less.t === 'video') videoList.innerHTML += html;
+            else materialList.innerHTML += html;
+        });
+
+        function loadLesson(idx, el) {
+            document.querySelectorAll('.lesson-item').forEach(i => i.classList.remove('active'));
+            if(el) el.classList.add('active');
+            else { const auto = document.getElementById(`lesson-${idx}`); if(auto) auto.classList.add('active'); }
+
+            const lesson = currentModule.lessons[idx];
+            const stage = document.getElementById('stage');
+            const btnArea = document.getElementById('actionArea');
+            
+            document.getElementById('currentTitle').innerText = lesson.title || cleanName(lesson.f);
+            document.getElementById('currentType').innerText = getTypeName(lesson.t);
+
+            let finalUrl = lesson.f;
+            if (!finalUrl.startsWith('http')) {
+                finalUrl = `${currentModule.folder.replace(/ /g, '%20')}/${lesson.f.replace(/ /g, '%20')}`;
+            }
+
+            // РЕНДЕР КОНТЕНТА
+            if(lesson.t === 'video') {
+                if (finalUrl.includes('rutube.ru')) {
+                    // АВТО-КОНВЕРТАЦИЯ ССЫЛКИ RUTUBE В EMBED
+                    let embedUrl = finalUrl
+                        .replace('/video/private/', '/play/embed/')
+                        .replace('/video/', '/play/embed/');
+                    
+                    stage.innerHTML = `<iframe src="${embedUrl}" frameBorder="0" allow="clipboard-write; autoplay" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>`;
+                }
+                else if(finalUrl.includes('youtube.com') || finalUrl.includes('youtu.be')) {
+                    let embedUrl = finalUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/');
+                    if(embedUrl.includes('&')) embedUrl = embedUrl.split('&')[0];
+                    stage.innerHTML = `<iframe src="${embedUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+                } else {
+                    // Локальное видео (на всякий случай)
+                    stage.innerHTML = `<video src="${finalUrl}" controls autoplay></video>`;
+                }
+            } 
+            else if (lesson.t === 'pdf') stage.innerHTML = `<iframe src="${finalUrl}#toolbar=0&navpanes=0"></iframe>`;
+            else if (lesson.t === 'image') stage.innerHTML = `<img src="${finalUrl}" class="img-viewer">`;
+            else if (lesson.t === 'txt') stage.innerHTML = `<div class="text-view"><div class="glass-card">${lesson.content || '<h2>Текст</h2>'}</div></div>`;
+            else stage.innerHTML = `<div style="color:#94a3b8; text-align:center;">📦<br>Файл доступен для скачивания</div>`;
+
+            // КНОПКА ВНИЗУ
+            if (lesson.t === 'video' && finalUrl.startsWith('http')) {
+                btnArea.innerHTML = `<a href="${finalUrl}" target="_blank" class="btn-dl"><span>Открыть источник</span><span>↗</span></a>`;
+            } else {
+                btnArea.innerHTML = `<a href="${finalUrl}" download target="_blank" class="btn-dl"><span>Скачать</span><span>↓</span></a>`;
+            }
+        }
+
+        function cleanName(name) { return name.replace(/infoRai\.NET\s*-\s*/g, '').replace(/^\d+(\.\d+)?\.?\s*/, '').replace(/\.(mp4|pdf|txt|zip|png)$/i, ''); }
+        function getIcon(t) { if(t==='video') return '▶'; if(t==='pdf') return '📄'; if(t==='image') return '🖼'; if(t==='txt') return '🔗'; if(t==='folder') return '📂'; return '📦'; }
+        function getTypeName(t) { if(t==='video') return 'ВИДЕОУРОК'; if(t==='pdf') return 'ДОКУМЕНТ PDF'; if(t==='image') return 'ИЗОБРАЖЕНИЕ'; if(t==='txt') return 'ССЫЛКА / ТЕКСТ'; return 'ФАЙЛ'; }
+
+        loadLesson(0);
+    </script>
+</body>
+</html>
