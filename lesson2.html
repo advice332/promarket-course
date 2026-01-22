@@ -25,32 +25,34 @@
         .module-title { font-size: 16px; font-weight: 800; color: white; }
         .sidebar-scroll { flex: 1; overflow-y: auto; padding: 20px 16px; }
         
-        /* Меню урока */
         .lesson-item { display: flex; align-items: center; gap: 12px; padding: 12px; margin-bottom: 4px; border-radius: 8px; background: rgba(139, 92, 246, 0.1); color: #fff; font-weight: 600; border: 1px solid rgba(139, 92, 246, 0.3); cursor: default; }
         
         .main-area { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
         
-        /* Оптимизированный контейнер (без лишних эффектов для скорости) */
+        /* === ГЛАВНАЯ ОПТИМИЗАЦИЯ === */
         .stage-container { 
-            flex: 1; background: #000; 
+            flex: 1; background: #0b0d12; 
             display: flex; align-items: center; justify-content: center; 
             overflow: hidden; position: relative;
+            /* Включаем аппаратное ускорение GPU, чтобы убрать лаги */
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            perspective: 1000px;
         }
         
-        iframe { width: 100%; height: 100%; border: none; background: #1a1a1a; }
+        /* Используем EMBED вместо IFRAME для скорости */
+        embed { width: 100%; height: 100%; border: none; display: block; }
 
         .bottom-bar { height: 70px; background: #0b0d12; border-top: var(--glass-border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; }
         .lesson-info h2 { font-size: 15px; margin-bottom: 4px; font-weight: 700; }
         .lesson-info p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
 
-        /* Кнопка Фулскрин (вместо скачивания) */
         .btn-fs { 
             padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 8px; 
             color: white; border: none; cursor: pointer;
             font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; 
         }
         .btn-fs:hover { background: #8b5cf6; }
-
     </style>
 </head>
 <body>
@@ -103,9 +105,8 @@
         const stage = document.getElementById('stage');
         const filePath = `${encodeURIComponent(currentMod.folder)}/${encodeURIComponent(currentMod.f)}`;
         
-        // Встраивание PDF: Убраны лишние параметры, оставлен только FitH
-        // type="application/pdf" помогает браузеру быстрее понять контент
-        stage.innerHTML = `<iframe src="${filePath}#toolbar=0&navpanes=0&scrollbar=0&view=FitH" type="application/pdf"></iframe>`;
+        // Вставляем EMBED для быстрой работы
+        stage.innerHTML = `<embed src="${filePath}#toolbar=0&navpanes=0&scrollbar=0&view=FitH" type="application/pdf" />`;
 
         // Функция полного экрана
         function toggleFullscreen() {
