@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок | PRO MARKET ADVANCED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #020617;
+            --bg-sidebar: #0b0d12;
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --text-main: #fff;
+            --text-muted: #94a3b8;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body { font-family: var(--font-main); background: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+        .sidebar { width: 340px; background: var(--bg-sidebar); border-right: var(--glass-border); display: flex; flex-direction: column; z-index: 20; flex-shrink: 0; }
+        .sidebar-header { padding: 20px 24px; border-bottom: var(--glass-border); flex-shrink: 0; }
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-size: 12px; font-weight: 600; transition: 0.2s; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .back-btn:hover { color: #fff; }
+        .module-title { font-size: 16px; font-weight: 800; color: white; }
+        .sidebar-scroll { flex: 1; overflow-y: auto; padding: 20px 16px; }
+        .lesson-item { display: flex; align-items: center; gap: 12px; padding: 12px; margin-bottom: 4px; border-radius: 8px; background: rgba(139, 92, 246, 0.1); color: #fff; font-weight: 600; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .main-area { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .stage-container { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        iframe { width: 100%; height: 100%; border: none; background: #1a1a1a; }
+        .bottom-bar { height: 70px; background: #0b0d12; border-top: var(--glass-border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; }
+        .lesson-info h2 { font-size: 15px; margin-bottom: 4px; font-weight: 700; }
+        .lesson-info p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        .btn-dl { padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 8px; color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="modules2.html" class="back-btn">← Меню модулей</a>
+            <div class="module-title" id="moduleTitle">Загрузка...</div>
+        </div>
+        <div class="sidebar-scroll">
+            <div class="lesson-item">
+                <span>📄</span>
+                <span id="lessonListTitle">Слайды урока</span>
+            </div>
+        </div>
+    </div>
+    <div class="main-area">
+        <div class="stage-container" id="stage"></div>
+        <div class="bottom-bar">
+            <div class="lesson-info">
+                <h2 id="currentTitle">Презентация</h2>
+                <p>Advanced Content</p>
+            </div>
+            <div id="actionArea"></div>
+        </div>
+    </div>
+    <script>
+        const courseData2 = [
+            { folder: "[Advanced] Модуль 1", f: "Добро пожаловать!1.pdf" },
+            { folder: "[Advanced] Модуль 2", f: "Введение 2 блок2.pdf" },
+            { folder: "[Advanced] Модуль 3", f: "основы Figma3.pdf" },
+            { folder: "[Advanced] Модуль 4", f: "Модуль 4.pdf" }, // Заглушка готова
+            { folder: "[Advanced] Модуль 5", f: "Правило близости, часть первая 5.pdf" }
+        ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const modIndex = parseInt(urlParams.get('mod') || 0);
+        const currentMod = courseData2[modIndex];
+
+        document.getElementById('moduleTitle').innerText = `Модуль ${modIndex + 1}`;
+        const cleanName = currentMod.f.replace('.pdf', '').replace(/\d+$/, '');
+        document.getElementById('currentTitle').innerText = cleanName;
+        document.getElementById('lessonListTitle').innerText = cleanName;
+
+        const stage = document.getElementById('stage');
+        const filePath = `${encodeURIComponent(currentMod.folder)}/${encodeURIComponent(currentMod.f)}`;
+        
+        // Встраивание PDF с параметрами скрытия инструментов
+        stage.innerHTML = `<iframe src="${filePath}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"></iframe>`;
+
+        document.getElementById('actionArea').innerHTML = `
+            <a href="${filePath}" download class="btn-dl">Скачать PDF</a>
+        `;
+    </script>
+</body>
+</html>
