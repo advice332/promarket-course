@@ -65,7 +65,7 @@
             backdrop-filter: blur(10px); cursor: pointer;
         }
 
-        /* === МОБИЛЬНЫЕ СТИЛИ (ТЕЛЕФОНЫ И ПЛАНШЕТЫ) === */
+        /* === МОБИЛЬНЫЕ СТИЛИ === */
         @media (max-width: 900px) {
             .sidebar { position: fixed; left: 0; top: 0; height: 100%; width: 85%; transform: translateX(-100%); box-shadow: 10px 0 50px rgba(0,0,0,0.5); }
             .sidebar.active { transform: translateX(0); }
@@ -74,7 +74,7 @@
             /* Скрываем встроенный PDF на телефонах */
             .stage-container embed { display: none; } 
             .mobile-placeholder { display: block; }
-            .btn-fs { display: none; } /* Кнопка фулскрин не нужна на мобилке */
+            .btn-fs { display: none; } 
             .bottom-bar { padding: 0 15px; }
         }
     </style>
@@ -88,7 +88,8 @@
             <div class="module-title" id="moduleTitle">Загрузка...</div>
         </div>
         <div class="sidebar-scroll">
-            <div class="lesson-item" onclick="toggleMenu()"> <span>📄</span>
+            <div class="lesson-item" onclick="toggleMenu()">
+                <span>📄</span>
                 <span id="lessonListTitle">Слайды урока</span>
             </div>
         </div>
@@ -99,7 +100,7 @@
             <div class="mobile-placeholder">
                 <div style="font-size: 40px; margin-bottom: 10px;">📱</div>
                 <h3 style="margin-bottom: 10px;">Мобильный режим</h3>
-                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Встроенный просмотр может работать некорректно на телефоне. Откройте файл во внешнем приложении.</p>
+                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Встроенный просмотр может работать некорректно на телефоне. Откройте файл в удобном формате.</p>
                 <a href="#" id="mobileLink" class="mobile-btn" target="_blank">
                     Открыть презентацию
                 </a>
@@ -149,7 +150,7 @@
         // 2. Настраиваем кнопку для телефонов
         document.getElementById('mobileLink').href = filePath;
 
-        // Логика меню (открыть/закрыть)
+        // Логика меню
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('active');
         }
