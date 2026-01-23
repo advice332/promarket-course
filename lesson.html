@@ -6,64 +6,110 @@
     <title>Урок | PRO MARKET</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-body: #020617; --bg-sidebar: #0b0d12; --accent: #8b5cf6; --font-main: 'Plus Jakarta Sans', sans-serif; --glass-border: 1px solid rgba(255, 255, 255, 0.08); }
+        /* === ГЛОБАЛЬНЫЕ СТИЛИ === */
+        :root {
+            --bg-body: #020617;
+            --bg-sidebar: #0b0d12;
+            --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --text-main: #fff;
+            --text-muted: #94a3b8;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { font-family: var(--font-main); background: var(--bg-body); color: white; height: 100vh; display: flex; overflow: hidden; }
+        body { font-family: var(--font-main); background: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
 
-        /* САЙДБАР */
-        .sidebar { width: 340px; background: var(--bg-sidebar); border-right: var(--glass-border); display: flex; flex-direction: column; z-index: 50; flex-shrink: 0; transition: transform 0.3s ease; }
-        .sidebar-header { padding: 20px; border-bottom: var(--glass-border); }
-        .back-btn { color: #94a3b8; text-decoration: none; font-size: 12px; font-weight: 600; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .module-title { font-weight: 800; font-size: 16px; line-height: 1.4; }
+        /* === САЙДБАР (МЕНЮ) === */
+        .sidebar { width: 340px; background: var(--bg-sidebar); border-right: var(--glass-border); display: flex; flex-direction: column; z-index: 50; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar-header { padding: 20px 24px; border-bottom: var(--glass-border); flex-shrink: 0; }
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-size: 12px; font-weight: 600; transition: 0.2s; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .back-btn:hover { color: #fff; }
+        .module-title { font-size: 16px; font-weight: 800; line-height: 1.4; color: white; }
+        
         .sidebar-scroll { flex: 1; overflow-y: auto; padding: 0; }
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        
         .list-section { padding: 20px 16px 10px; }
-        .section-header { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; margin-bottom: 10px; padding-left: 12px; }
-        .lesson-item { padding: 12px; margin-bottom: 2px; border-radius: 8px; cursor: pointer; color: #94a3b8; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; border: 1px solid transparent; }
+        .section-header { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 10px; padding-left: 12px; }
+        
+        .lesson-item { display: flex; align-items: center; gap: 12px; padding: 12px; margin-bottom: 4px; border-radius: 8px; cursor: pointer; color: var(--text-muted); font-size: 13px; font-weight: 500; transition: 0.2s; border: 1px solid transparent; }
         .lesson-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .lesson-item.active { background: rgba(139, 92, 246, 0.1); color: #fff; border-color: rgba(139, 92, 246, 0.3); }
+        .lesson-item.active { background: rgba(139, 92, 246, 0.1); color: #fff; font-weight: 600; border-color: rgba(139, 92, 246, 0.3); }
+        .type-icon { opacity: 0.7; width: 16px; text-align: center; font-size: 14px; flex-shrink: 0; }
         .divider { height: 1px; background: var(--glass-border); margin: 0 20px; }
 
-        /* ОСНОВНАЯ ЗОНА */
-        .main-area { flex: 1; display: flex; flex-direction: column; position: relative; width: 100%; }
-        .stage-container { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        iframe { width: 100%; height: 100%; border: none; }
+        /* === ГЛАВНАЯ ОБЛАСТЬ === */
+        .main-area { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; width: 100%; }
+        .stage-container { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        
+        iframe { width: 100%; height: 100%; border: none; background: #000; }
+        video { width: 100%; height: 100%; max-height: 100vh; object-fit: contain; outline: none; display: block; background: #000; }
         .img-viewer { width: 100%; height: 100%; object-fit: contain; }
 
-        /* ТЕКСТОВЫЕ БЛОКИ (Адаптированные) */
-        .text-view { width: 100%; height: 100%; overflow-y: auto; padding: 40px; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); }
-        .glass-card { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.03); border: var(--glass-border); border-radius: 20px; padding: 40px; backdrop-filter: blur(20px); }
-        .glass-card h2 { font-size: 24px; margin-bottom: 20px; color: white; }
-        .glass-card p { color: #cbd5e1; margin-bottom: 20px; line-height: 1.6; }
-        
-        /* КНОПКИ РЕСУРСОВ В ТЕКСТЕ */
-        .res-grid { display: grid; gap: 15px; margin-top: 20px; }
-        .res-ticket { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-decoration: none; color: white; transition: 0.2s; }
-        .res-ticket:hover { background: rgba(255,255,255,0.1); border-color: #8b5cf6; }
+        /* === ТЕКСТОВЫЕ БЛОКИ (АДАПТИРОВАННЫЕ) === */
+        .text-view { width: 100%; height: 100%; overflow-y: auto; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); padding: 40px; display: flex; justify-content: center; }
+        .glass-card { width: 100%; max-width: 800px; height: fit-content; background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: var(--glass-border); border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .glass-card h2 { margin-bottom: 24px; font-size: 28px; color: white; line-height: 1.2; }
+        .glass-card p { color: #cbd5e1; margin-bottom: 20px; line-height: 1.6; word-wrap: break-word; }
+
+        /* === КНОПКИ РЕСУРСОВ === */
+        .res-grid { display: grid; gap: 12px; margin-top: 20px; }
+        .res-ticket { 
+            display: flex; align-items: center; gap: 15px; padding: 16px; 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 12px; text-decoration: none; transition: 0.3s; color: white; 
+            width: 100%; /* Чтобы не сжималась */
+        }
+        .res-ticket:hover { background: rgba(255,255,255,0.1); border-color: #8b5cf6; transform: translateY(-2px); }
         .res-icon-box { width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-        .res-name { font-weight: 700; font-size: 14px; }
-
-        /* НИЖНЯЯ ПАНЕЛЬ */
+        .res-info { display: flex; flex-direction: column; overflow: hidden; }
+        .res-name { font-weight: 700; font-size: 14px; white-space: normal; line-height: 1.3; } /* Разрешаем перенос текста */
+        
+        /* === НИЖНЯЯ ПАНЕЛЬ === */
         .bottom-bar { height: 70px; background: #0b0d12; border-top: var(--glass-border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; z-index: 40; }
-        .lesson-info h2 { font-size: 15px; margin-bottom: 4px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-        .lesson-info p { font-size: 11px; color: #94a3b8; text-transform: uppercase; }
-        .btn-dl { padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 8px; color: white; text-decoration: none; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .lesson-info { overflow: hidden; padding-right: 15px; }
+        .lesson-info h2 { font-size: 15px; margin-bottom: 4px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lesson-info p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        .btn-dl { 
+            padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 8px; 
+            color: white; text-decoration: none; font-size: 13px; font-weight: 600; 
+            display: flex; align-items: center; gap: 8px; transition: 0.2s; white-space: nowrap;
+        }
+        .btn-dl:hover { background: #8b5cf6; }
 
-        /* МЕНЮ ГАМБУРГЕР (Только для мобильных) */
-        .menu-toggle { display: none; position: fixed; top: 15px; right: 15px; z-index: 100; width: 40px; height: 40px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: white; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; backdrop-filter: blur(10px); }
+        /* === МЕНЮ ГАМБУРГЕР (КНОПКА) === */
+        .menu-toggle {
+            display: none; position: fixed; top: 15px; right: 15px; z-index: 100;
+            width: 44px; height: 44px; background: rgba(2, 6, 23, 0.9); 
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; 
+            color: white; font-size: 22px; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px); cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
 
-        /* МОБИЛЬНАЯ АДАПТАЦИЯ */
+        /* === АДАПТАЦИЯ ПОД ТЕЛЕФОН === */
         @media (max-width: 900px) {
+            /* Сайдбар скрыт по умолчанию, выезжает слева */
             .sidebar { position: fixed; left: 0; top: 0; height: 100%; width: 85%; transform: translateX(-100%); box-shadow: 10px 0 50px rgba(0,0,0,0.5); }
-            .sidebar.active { transform: translateX(0); }
-            .menu-toggle { display: flex; }
-            .text-view { padding: 20px; }
-            .glass-card { padding: 20px; }
+            .sidebar.active { transform: translateX(0); } /* Класс для открытия */
+            
+            .menu-toggle { display: flex; } /* Показываем кнопку */
+            
+            /* Уменьшаем отступы для контента */
+            .text-view { padding: 15px; } 
+            .glass-card { padding: 20px; width: 100%; }
+            .glass-card h2 { font-size: 20px; }
+            
             .bottom-bar { padding: 0 15px; }
-            .btn-dl span:last-child { display: none; } /* Скрываем стрелку на кнопке, если места мало */
+            .btn-dl span:last-child { display: none; } /* Скрываем стрелку на кнопке скачивания, если мало места */
+            
+            .res-ticket { padding: 12px; } /* Чуть компактнее кнопки */
         }
     </style>
 </head>
 <body>
+
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
     <div class="sidebar" id="sidebar">
@@ -96,7 +142,7 @@
     </div>
 
     <script>
-        // === ТВОИ ПОЛНЫЕ ДАННЫЕ (НИЧЕГО НЕ ПОТЕРЯНО) ===
+        // === ТВОЯ БАЗА ДАННЫХ (ВСЕ ССЫЛКИ И ПРОМПТЫ СОХРАНЕНЫ) ===
         const courseData = [
             {
                 title: "0. Введение",
@@ -137,8 +183,14 @@
                     { f: "https://rutube.ru/video/private/e0907aed7cfa4aac53738b48ee4ef1c5/?p=unn5kBC6M6pu_j7TPK2c9g", title: "2. Прокачка насмотренности", t: "video" },
                     { f: "https://rutube.ru/video/private/a606009312ae5d1cc1a31236ac56647a/?p=Wh2_Ka80b9ypTCGCz7epMg", title: "3. Топ полезных сайтов и сервисов", t: "video" },
                     { f: "https://rutube.ru/video/private/abf5d0946b6802e2a225b01572e326d7/?p=1mznCcvqvtyd-eTqUpMPhg", title: "4. Видео про шрифты", t: "video" },
-                    { f: "infoRai.NET - Полезные сервисы и сайты.txt", t: "txt", content: `<h2>Полезные сервисы</h2><p>Подборка ресурсов для работы:</p><div class="res-grid"><a href="https://www.flaticon.com/ru/" target="_blank" class="res-ticket"><div class="res-icon-box">♦</div><div class="res-info"><span class="res-name">Flaticon</span></div></a><a href="https://ru.freepik.com/" target="_blank" class="res-ticket"><div class="res-icon-box">E</div><div class="res-info"><span class="res-name">Freepik</span></div></a></div>` },
-                    { f: "infoRai.NET - Чек-лист.txt", t: "txt", content: `<h2>Чек-лист ошибок</h2><p>Интерактивная доска в Figma:</p><div class="res-grid"><a href="https://www.figma.com/" target="_blank" class="res-ticket" style="border-color:#10b981;"><div class="res-icon-box">F</div><div class="res-info"><span class="res-name">Открыть Whiteboard</span></div></a></div>` }
+                    { 
+                        f: "infoRai.NET - Полезные сервисы и сайты.txt", t: "txt",
+                        content: `<h2>Полезные сервисы</h2><p>Подборка ресурсов для работы:</p><div class="res-grid"><a href="https://www.flaticon.com/ru/" target="_blank" class="res-ticket"><div class="res-icon-box">♦</div><div class="res-info"><span class="res-name">Flaticon</span></div></a><a href="https://ru.freepik.com/" target="_blank" class="res-ticket"><div class="res-icon-box">E</div><div class="res-info"><span class="res-name">Freepik</span></div></a></div>`
+                    },
+                    { 
+                        f: "infoRai.NET - Чек-лист.txt", t: "txt",
+                        content: `<h2>Чек-лист ошибок</h2><p>Интерактивная доска в Figma:</p><div class="res-grid"><a href="https://www.figma.com/" target="_blank" class="res-ticket" style="border-color:#10b981;"><div class="res-icon-box">F</div><div class="res-info"><span class="res-name">Открыть Whiteboard</span></div></a></div>`
+                    }
                 ]
             },
             {
@@ -182,9 +234,9 @@
                     { f: "https://rutube.ru/video/private/87841d6a871da62288eded5cdcb8d4ad/?p=QlzNXv2geH73rQXeCbbP-Q", title: "2. Улучшение качества фото", t: "video" },
                     { f: "https://rutube.ru/video/private/6cc3b8c442108147845d34be560daeec/?p=FTj1UKZcEM--AInwvzTdMQ", title: "3. Генерация изображений по запросу", t: "video" },
                     { f: "https://rutube.ru/video/private/2a1ef8d68ca1042b58006003499f8ef8/?p=cvXfakOjpvusTxw5GzrbEQ", title: "4. Chat GPT для продвижения", t: "video" },
-                    { f: "infoRai.NET - PhotoRoom.txt", t: "txt", content: `<h2>PhotoRoom</h2><a href="https://www.photoroom.com/" target="_blank" class="res-ticket"><div class="res-icon-box">P</div><span class="res-name">Открыть сайт</span></a>` },
-                    { f: "infoRai.NET - Бот.txt", t: "txt", content: `<h2>PixelWiz Bot</h2><a href="https://t.me/pixelwiz_bot" target="_blank" class="res-ticket"><div class="res-icon-box">🤖</div><span class="res-name">Запустить бота</span></a>` },
-                    { f: "infoRai.NET - Полезные ссылки.txt", t: "txt", content: `<h2>AI Инструменты</h2><a href="https://leonardo.ai/" target="_blank" class="res-ticket"><div class="res-icon-box">L</div><span class="res-name">Leonardo AI</span></a>` },
+                    { f: "infoRai.NET - PhotoRoom.txt", t: "txt", content: `<h2>PhotoRoom</h2><a href="https://www.photoroom.com/" target="_blank" class="res-ticket"><div class="res-icon-box">P</div><div class="res-info"><span class="res-name">Открыть сайт</span></div></a>` },
+                    { f: "infoRai.NET - Бот.txt", t: "txt", content: `<h2>PixelWiz Bot</h2><a href="https://t.me/pixelwiz_bot" target="_blank" class="res-ticket"><div class="res-icon-box">🤖</div><div class="res-info"><span class="res-name">Запустить бота</span></div></a>` },
+                    { f: "infoRai.NET - Полезные ссылки.txt", t: "txt", content: `<h2>AI Инструменты</h2><a href="https://leonardo.ai/" target="_blank" class="res-ticket"><div class="res-icon-box">L</div><div class="res-info"><span class="res-name">Leonardo AI</span></div></a>` },
                     { f: "infoRai.NET - Те самые сообщения.txt", t: "txt", content: `<h2>Промпты ChatGPT</h2><p>Скопируйте промпты из файла:</p><div class="glass-card" style="background:rgba(0,0,0,0.3); font-family:monospace; font-size:12px; margin-top:10px;"><p style="color:#8b5cf6;">// Анализ ЦА</p><p>Напиши портрет целевой аудитории для товара [ТОВАР]. Боли, желания, страхи.</p><hr style="border-color:rgba(255,255,255,0.1); margin:15px 0;"><p style="color:#8b5cf6;">// Описание товара</p><p>Напиши продающее описание для Wildberries для товара [ТОВАР], используй SEO ключи...</p></div>` }
                 ]
             },
@@ -218,8 +270,7 @@
         });
 
         function loadLesson(idx, el) {
-            // Закрываем меню на телефоне при клике
-            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('sidebar').classList.remove('active'); // Закрыть меню
 
             document.querySelectorAll('.lesson-item').forEach(i => i.classList.remove('active'));
             if(el) el.classList.add('active');
@@ -237,52 +288,36 @@
                 finalUrl = `${currentModule.folder.replace(/ /g, '%20')}/${lesson.f.replace(/ /g, '%20')}`;
             }
 
-            // РЕНДЕР КОНТЕНТА
+            // РЕНДЕР ВИДЕО
             if(lesson.t === 'video') {
                 let embedUrl = "";
-                // VK ВИДЕО
                 if (finalUrl.includes('vk.com') || finalUrl.includes('vk.ru')) {
                     const match = finalUrl.match(/video(-?\d+)_(\d+)/);
                     if (match) embedUrl = `https://vk.com/video_ext.php?oid=${match[1]}&id=${match[2]}&hd=2&autoplay=1`;
-                    else embedUrl = finalUrl; 
+                    else embedUrl = finalUrl;
                 }
-                // RUTUBE
                 else if (finalUrl.includes('rutube.ru')) {
                     embedUrl = finalUrl.replace('/video/private/', '/play/embed/').replace('/video/', '/play/embed/');
                 }
-                // YOUTUBE
                 else if(finalUrl.includes('youtube.com') || finalUrl.includes('youtu.be')) {
                     embedUrl = finalUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/');
                     if(embedUrl.includes('&')) embedUrl = embedUrl.split('&')[0];
                 }
 
-                if(embedUrl) {
-                    stage.innerHTML = `<iframe src="${embedUrl}" frameBorder="0" allow="clipboard-write; autoplay; fullscreen" allowFullScreen></iframe>`;
-                } else {
-                    stage.innerHTML = `<video src="${finalUrl}" controls autoplay></video>`;
-                }
+                if(embedUrl) stage.innerHTML = `<iframe src="${embedUrl}" frameBorder="0" allow="clipboard-write; autoplay; fullscreen" allowFullScreen></iframe>`;
+                else stage.innerHTML = `<video src="${finalUrl}" controls autoplay></video>`;
             } 
-            else if (lesson.t === 'pdf') {
-                stage.innerHTML = `<iframe src="${finalUrl}#toolbar=0&navpanes=0"></iframe>`;
-            }
-            else if (lesson.t === 'image') {
-                stage.innerHTML = `<img src="${finalUrl}" class="img-viewer">`;
-            }
-            else if (lesson.t === 'txt') {
-                stage.innerHTML = `<div class="text-view"><div class="glass-card">${lesson.content || '<h2>Текст</h2>'}</div></div>`;
-            }
-            else {
-                stage.innerHTML = `<div style="color:#94a3b8; text-align:center; padding:20px;">🔒<br>Файл доступен для скачивания</div>`;
-            }
+            else if (lesson.t === 'pdf') stage.innerHTML = `<iframe src="${finalUrl}#toolbar=0&navpanes=0"></iframe>`;
+            else if (lesson.t === 'image') stage.innerHTML = `<img src="${finalUrl}" class="img-viewer">`;
+            else if (lesson.t === 'txt') stage.innerHTML = `<div class="text-view"><div class="glass-card">${lesson.content}</div></div>`;
+            else stage.innerHTML = `<div style="color:#94a3b8; text-align:center; padding:20px;">🔒<br>Файл доступен для скачивания</div>`;
 
-            // КНОПКА ВНИЗУ
+            // КНОПКИ
             if (lesson.t === 'video' && finalUrl.startsWith('http')) {
                 btnArea.innerHTML = `<a href="${finalUrl}" target="_blank" class="btn-dl"><span>Открыть источник</span><span>↗</span></a>`;
             } else if (lesson.t !== 'txt') {
                 btnArea.innerHTML = `<a href="${finalUrl}" download target="_blank" class="btn-dl"><span>Скачать</span><span>↓</span></a>`;
-            } else {
-                btnArea.innerHTML = '';
-            }
+            } else btnArea.innerHTML = '';
         }
 
         function toggleMenu() {
@@ -293,6 +328,11 @@
         function getIcon(t) { if(t==='video') return '▶'; if(t==='pdf') return '📄'; if(t==='image') return '🖼'; if(t==='txt') return '🔗'; if(t==='folder') return '📂'; return '📦'; }
         function getTypeName(t) { if(t==='video') return 'ВИДЕОУРОК'; if(t==='pdf') return 'ДОКУМЕНТ PDF'; if(t==='image') return 'ИЗОБРАЖЕНИЕ'; if(t==='txt') return 'ССЫЛКА / ТЕКСТ'; return 'ФАЙЛ'; }
 
+        // АВТО-ОТКРЫТИЕ МЕНЮ НА МОБИЛЬНОМ ПРИ ВХОДЕ
+        if (window.innerWidth <= 900) {
+            toggleMenu();
+        }
+        
         loadLesson(0);
     </script>
 </body>
